@@ -4,14 +4,13 @@
 
 Llistat d'exercicis dels projectes fets a M14
 
-Per clonar el repositori:
+per clonar el repositori:
 ```bash
-git clone https://gitlab.com/isx.alvitres.valdiviezo.bryan/m14-projectes.git
+git clone git@github.com:Bryan501/M06-AS-2.git
 ```
-
 Per pujar els apunts:
 ```bash
-git add . ; git commit -m "asd" ; git push origin main
+git add . ; git commit -m "asd" ; git push origin master
 ```
 Per pausar totes les imatges
 ```bash
