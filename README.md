@@ -11,7 +11,7 @@ git clone https://gitlab.com/isx.alvitres.valdiviezo.bryan/m14-projectes.git
 
 Per pujar els apunts:
 ```bash
-git add . ; git commit -m "asd" ; git push
+git add . ; git commit -m "asd" ; git push origin main
 ```
 Per pausar totes les imatges
 ```bash
