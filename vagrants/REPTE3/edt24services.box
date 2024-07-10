@@ -1,0 +1,1 @@
+vagrant package --output edt24services.box

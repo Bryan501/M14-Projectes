@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+    <title>Exemple del flux del codi d'autorització amb Spotify</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/styles/spotify.css">
+</head>
+<body>
+    <div class="container">
+        <div id="login">
+            <h1>Fluxe del codi d'autorització</h1>
+            <a href="/login" class="btn btn-primary">Log in amb Spotify</a>
+        </div>
+        <div id="loggedin">
+            <div id="user-profile"></div>
+            <div id="input">
+                <input id="name">
+                <button id="button">Aconsegueix les millors cançons del teu artista preferit, fent-li click aquí!</button>
+                <button id="clear_results">Esborrar resultats</button>
+            </div>
+            <dl id="resultats" class="dl-horizontal">
+                <dt>Artistes</dt>
+                <dd id="artists" class="text-overflow"></dd>
+                <dt>Top Pistes</dt>
+                <dd id="top_tracks" class="text-overflow"></dd>
+            </dl>
+            <div id="oauth"></div>
+            <button class="btn btn-default" id="obtain-new-token">Obteniu un token nou amb el token d'actualització</button>
+    </div>
+    </div>
+
+    <script id="user-profile-template" type="text/x-handlebars-template">
+      <h1>Sessió iniciada com {{display_name}}</h1>
+      <div class="media">
+        <div class="pull-left">
+          <img class="media-object" width="150" src="{{images.0.url}}" />
+        </div>
+        <div class="media-body">
+          <dl class="dl-horizontal">
+            <dt>Alias</dt><dd class="clearfix">{{display_name}}</dd>
+            <dt>Id</dt><dd>{{id}}</dd>
+            <dt>Correu Electrònic</dt><dd>{{email}}</dd>
+            <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
+            <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
+            <dt>Imatge de perfil</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
+            <dt>País</dt><dd>{{country}}</dd>
+          </dl>
+        </div>
+      </div>
+    </script>
+
+    <script id="oauth-template" type="text/x-handlebars-template">
+      <h2>oAuth info</h2>
+      <dl class="dl-horizontal">
+        <dt>Accés el  token</dt><dd class="text-overflow">{{access_token}}</dd>
+        <dt>Refrescar el token</dt><dd class="text-overflow">{{refresh_token}}</dd>
+      </dl>
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="/scripts/spotify.js"></script>
+</body>
+</html>

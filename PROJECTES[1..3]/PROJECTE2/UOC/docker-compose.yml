@@ -1,0 +1,56 @@
+version: '3.6'
+
+services:
+  mongodb:
+    image: mongo:7-jammy
+    container_name: mongodb.edt.org
+    hostname: mongodb.edt.org
+    ports:
+      - "27017:27017"
+    volumes: 
+      - "data-mongo:/var/lib/mongodb"
+      - "./data-mongo.js:/docker-entrypoint-initdb.d/data-mongo.js"
+    environment: 
+      - MONGO_USERNAME=guest
+      - MONGO_PASSWORD=guest
+      - MONGO_DATABASE=films
+      - MONGO_HOST=mongodb.edt.org
+      - MONGO_PORT=27017
+    networks:
+      - 2hisx
+
+  node:
+    build: ./node-app
+    container_name: node.edt.org
+    environment: 
+      - MONGO_USERNAME=guest
+      - MONGO_PASSWORD=guest
+      - MONGO_DATABASE=films
+      - MONGO_HOST=mongodb.edt.org
+      - MONGO_PORT=27017
+    networks:
+      - 2hisx
+      - security
+    ports:
+      - "5000:3000"
+  
+  reverse-proxy:
+    build: ./reverse-proxy
+    container_name: rproxy.edt.org
+    depends_on:
+      - node
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - security
+
+
+volumes:
+  data-mongo:
+
+networks:
+  2hisx:
+  security:
+
+

@@ -1,0 +1,22 @@
+version: "3.1"
+services:
+  postgres:
+    image: bryan501/postgres23:latest
+    container_name: mi-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret123
+      POSTGRES_DB: training
+    networks:
+      - mypostgres
+  adminer:
+    image: adminer
+    container_name: mi-adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - mypostgres
+networks:
+  mypostgres:
+

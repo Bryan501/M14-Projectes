@@ -1,0 +1,32 @@
+version: "2"
+services:
+  web:
+    image: bryan501/web23:latest
+    container_name: mi-web
+    hostname: web.edt.org
+    ports:
+      - "80:80"
+    networks:
+      - mycompose
+  net:
+    image: bryan501/net23:latest
+    container_name: mi-net
+    hostname: net.edt.org
+    ports:
+      - "7:7"
+      - "13:13"
+      - "19:19"
+    networks:
+      - mycompose
+  portainer:
+    image: portainer/portainer
+    container_name: mi-portainer
+    hostname: portainer.edt.org
+    ports:
+      - "9000:9000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - mycompose
+networks:
+  mycompose:

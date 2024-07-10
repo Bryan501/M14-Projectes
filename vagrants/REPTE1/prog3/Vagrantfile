@@ -1,0 +1,11 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.define "ubuntu_virtualbox" do |ubuntu_virtualbox|
+      ubuntu_virtualbox.vm.box = "ubuntu/focal64"
+      ubuntu_virtualbox.vm.provider "virtualbox" do |v|
+      end
+    end
+  end
+  

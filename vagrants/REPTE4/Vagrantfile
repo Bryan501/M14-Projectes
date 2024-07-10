@@ -1,0 +1,74 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "debian/bullseye64"
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = 4096
+      vb.cpus = 2
+    end
+    config.vm.network "public_network", bridge: "enp1s0"
+    config.vm.provision "shell", inline: $script_instalacio_aula_debian
+  end
+  
+  $script_instalacio_aula_debian = <<SCRIPT
+  # Crear usuari 'guest' sense contrasenya
+  sudo useradd -m -s /bin/bash guest
+  echo "guest:guest" | sudo chpasswd
+  
+  sudo useradd -m -s /bin/bash a221354ba
+  echo "a221354ba:GU50S56X" | sudo chpasswd
+  
+  sudo reboot
+  
+  # Actualitzar el sistema i instal·lació de paquest bàsics
+  sudo apt-get update
+  sudo apt-get -y install vim vim-gtk3 mc geany aptitude tree git openssh-server
+  sudo systemctl disable ssh
+  sudo apt-get -y purge gnome-games
+  sudo apt-get -y autoremove
+  
+  # Instal·lar paquets necessaris per a la infraestructura de xarxa i autenticació
+  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install krb5-user krb5-multidev libpam-mount sssd nfs-common autofs ufw curl
+  
+  # Clonar arxius de configuració del manelmellado
+  git clone https://gitlab.com/manelmellado/ubnt-at-inf.git
+  sudo cp ubnt-at-inf/Debian\ 11/arxius/etc/sssd/sssd.conf /etc/sssd/
+  sudo cp ubnt-at-inf/Debian\ 11/arxius/etc/sudoers.d/inf /etc/sudoers.d/
+  sudo chmod 600 /etc/sssd/sssd.conf
+  
+  # Actualitzar la configuració d'autenticació
+  sudo DEBIAN_FRONTEND=noninteractive pam-auth-update --enable mkhomedir sss systemd pwquality unix libpam-mount
+  sudo systemctl disable sssd-nss.socket
+  sudo systemctl disable sssd-autofs.socket
+  sudo systemctl restart sssd
+  sudo systemctl restart rpc-gssd
+  
+  # Instal·lació de paquets addicionals
+  sudo apt-get -y install gpm pwgen
+  n=$(pwgen -1)
+  echo -e "$n\n$n" | passwd guest
+  unset n
+  
+  # Edició del fitxer de fonts de paquets
+  sudo vim /etc/apt/sources.list <<EOF
+  /^deb .*bullseye main
+  :s/$/ contrib non-free/
+  :wq
+  EOF
+  
+  sudo sed -i '/^[^#]/  s/main$/main contrib non-free/' /etc/apt/sources.list
+  sudo apt-get update
+  sudo apt-get -y install chromium vlc gimp git tig meld linux-headers-'uname -r' gnome-shell-extension-desktop-icons terminator firmware-realtek firmware-misc-nonfree hunspell-ca hunspell-es
+  
+  sudo apt-mark hold linux-image-$(uname -r) # per apt-get
+  sudo aptitude hold linux-image-$(uname -r) # per aptitude
+  sudo apt-mark hold linux-headers-$(uname -r) # per apt-get
+  sudo aptitude hold linux-headers-$(uname -r) # per aptitude
+  # apt-mark unhold... per si volem treure el bloqueig
+  
+  # Canviar el servidor gràfic de Wayland a Xorg
+  sudo sed -i 's/#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/daemon.conf
+  gsettings set org.gnome.software download-updates false
+  SCRIPT
+  

@@ -1,0 +1,11 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.define "fedora_libvirtd" do |fedora_libvirtd|
+      fedora_libvirtd.vm.box = "fedora/cloud-37"
+      fedora_libvirtd.vm.provider "libvirt" do |libvirt|
+      end
+    end
+  end
+  

@@ -1,0 +1,17 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.define "alpine_libvirtd" do |alpine_libvirtd|
+      alpine_libvirtd.vm.box = "generic/alpine38"
+      alpine_libvirtd.vm.provider "libvirt" do |libvirt|
+      end
+    end
+  
+    config.vm.define "alpine_virtualbox" do |alpine_virtualbox|
+      alpine_virtualbox.vm.box = "generic/alpine38"
+      alpine_virtualbox.vm.provider "virtualbox" do |v|
+      end
+    end
+  end
+  

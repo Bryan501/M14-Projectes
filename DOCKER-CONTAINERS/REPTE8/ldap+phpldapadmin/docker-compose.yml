@@ -1,0 +1,21 @@
+version: "2"
+services:
+  ldap:
+    image: bryan501/ldap23:latest
+    container_name: mi-ldap
+    hostname: ldapserver
+    ports:
+      - "389:389"
+    networks:
+      - mynet
+  phpldapadmin:
+    image: bryan501/phpldapadmin23:latest
+    container_name: mi-php
+    hostname: php.edt.org
+    ports:
+      - "80:80"
+    networks:
+      - mynet
+networks:
+  mynet:
+

@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "generic/alpine38"
+  
+    # Sync de directorios desde el host a la máquina virtual
+    config.vm.synced_folder ".", "/vagrant_data"
+  
+    # Provisioning para copiar el archivo README.md
+    config.vm.provision "file", source: "./README.md", destination: "/var/tmp/README.md"
+  
+    # Provisioning con shell inline para mostrar la salida de "uname -a"
+    config.vm.provision "shell", inline: "uname -a"
+  
+    # Provisioning con shell inline para instalar Docker
+    config.vm.provision "shell", inline: <<-SHELL
+      apk add docker
+      addgroup vagrant docker
+      rc-update add docker default
+      service docker start
+    SHELL
+  
+    # Provisioning con shell path para ejecutar un script de instalación de git y clonar repositorios
+    config.vm.provision "shell", path: "./script.sh"
+  end
+  
